@@ -28,8 +28,6 @@ def show_cashe():
         
 
 if __name__ == "__main__":
-   if cashe_perm != cashe_temp:
-       cashe_perm = cashe_temp
    while True:
         print("\nМеню:")
         print("1. Добавить запись")
