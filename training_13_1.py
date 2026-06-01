@@ -1,7 +1,10 @@
 orders = []
+id_count = 0
 def create_order(customer_name):
+    global id_count
+    id_count += 1
     order = {
-        "id": len(orders)+1,
+        "id": id_count,
         "customer":customer_name,
         "products": [],
         "closed": False
@@ -14,32 +17,33 @@ def add_product(order_id, product_name):
 
         if order["id"] == order_id:
             if order["closed"] == True:
-                return "You can not edit it, cause it's already closed"
+                return  ["You can not edit it, cause it's already closed"]
             order["products"].append(product_name)
             return orders
         
-    return "there is no order with such id"
+    return ["there is no order with such id"]
 
 def close_order(order_id):
     for order in orders:
         if order["id"] == order_id:
             if order["closed"] == True:
-                return "You can not edit it, cause it's already closed"
+                return ["You can not edit it, cause it's already closed"]
             order["closed"] = True
             return orders  
-    return "there is no order with such id" 
+    return ["there is no order with such id"]
         
 def get_order(order_id):
     for order in orders:
         if order["id"] == order_id:
-            return print(order)
+            return order
+
+if __name__ == "__main__":
         
-create_order("Anton")
-create_order("Anton1")
-add_product(1,"cake")
-close_order(1)
-print(add_product(1, "cake. kaafd"))
-get_order(1)
+    create_order("Anton")
+    create_order("Anton1")
+    close_order(2)
+    print(add_product(2, "affdf"))
+    print(orders)
     
 
 # {
