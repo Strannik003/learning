@@ -8,10 +8,10 @@ player = {
 
 def take_damage(amount):
     if amount < 0:
-        return "Amount can not be negative"
+        return player["health"]
     if (player["health"]-amount) <= 0:
         player["health"] = 0
-        return "You are dead"
+        return player["health"]
     
     player["health"]-=amount
     return player["health"]
@@ -20,9 +20,9 @@ def take_damage(amount):
 
 def heal(amount):
     if amount < 0:
-        return "Amount can not be negative"
+        return player["health"]
     if player["health"] == 0:
-        return "You are already dead, you can not heal yourself"
+        return player["health"]
     elif (player["health"]+amount) > 100:
         player["health"]=100
         return player["health"]
@@ -39,7 +39,7 @@ def add_gold(amount):
 
 def add_xp(amount):
     if amount < 0:
-        return "Amount can not be negative"
+        return player["xp"], player["level"]
     calc = player["xp"]+amount + player["level"]*100
     player["level"] = calc // 100
     player["xp"]= calc % 100
@@ -47,10 +47,11 @@ def add_xp(amount):
 
 
 def get_status():
-     return player
+     if player["health"]==0:
+         return print(f"You are dead, your level was {player['level']}")
+     return print(player)
 
-
-take_damage(50)
-heal(20000)
-add_xp(135)
-get_status()
+if __name__ == "__main__":
+    take_damage(150)
+    heal(200)
+    get_status()
