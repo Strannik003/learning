@@ -1,8 +1,11 @@
 import fastapi, uvicorn, sqlite3
-import bcrypt
+import bcrypt, jwt
+import time
 from pydantic import BaseModel, Field, EmailStr
 
 app = fastapi.FastAPI()
+JWT_SECRET_KEY = "dhfhfdhdfhfddf"
+algorithm= "HS256"
 
 class RegRequest(BaseModel):
     name: str = Field(min_length=1, max_length=20)
@@ -50,7 +53,7 @@ def auth(request: LoginRequest):
 
 
 
-    cursor.execute("SELECT name, password FROM Users WHERE email = ?", (request.email, ))
+    cursor.execute("SELECT id, name, password FROM Users WHERE email = ?", (request.email, ))
     Log_Data_extracted = cursor.fetchall()
    
     
@@ -58,11 +61,18 @@ def auth(request: LoginRequest):
         return {"msg": "The mail is incorect, try another one"}
     
 
-    result = bcrypt.checkpw(Byted_passoword, Log_Data_extracted[0][1])
-    responce = f'Welcome {Log_Data_extracted[0][0]}'
+    result = bcrypt.checkpw(Byted_passoword, Log_Data_extracted[0][2])
+    response = f'Welcome {Log_Data_extracted[0][1]}'
+
+    payload = {"id": Log_Data_extracted[0][0],
+               "exp": time.time()+900
+               }
+    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm = algorithm)
 
     if result:
-        return {"msg": responce}
+        return {"msg": response, "JWT_Token": token}
+    else:
+        return {"msg": "Password is incorect, try another one"}
 
 
 
